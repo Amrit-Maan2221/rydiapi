@@ -1,5 +1,18 @@
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowRequests", policy =>
+    {
+        policy.AllowAnyOrigin() // Allow any origin
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+        // Remove .AllowCredentials() if you are using AllowAnyOrigin()
+        // If you need to use AllowCredentials(), then specify .WithOrigins("https://example.com") instead of AllowAnyOrigin()
+    });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -16,10 +29,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Apply CORS middleware before Authorization and MapControllers
+app.UseCors("AllowRequests");
+
 app.UseAuthorization();
 
-
 app.MapControllers();
-
 
 app.Run();

@@ -31,10 +31,6 @@ namespace rydeapi.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password) || string.IsNullOrEmpty(request.Country))
-            {
-                return BadRequest(new { message = "Email, password, and country are required." });
-            }
 
             // Hash the password
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
